@@ -8,7 +8,7 @@ topics:
   - "security"
   - "ai"
   - "network"
-published: true
+published: false
 ---
 
 2026年5月、Linuxカーネルに極めて深刻なローカル特権昇格（LPE）の脆弱性**「Fragnesia」（CVE-2026-46300）**が発見されました。この脆弱性は、かつて世界を震撼させた「Dirty COW」を彷彿とさせるものであり、リードオンリーのファイルシステムキャッシュをメモリ上で改ざんすることを可能にします。
