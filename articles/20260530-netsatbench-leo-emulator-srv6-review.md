@@ -3,10 +3,10 @@ title: "【論文読み】NetSatBench: 分散コンテナベースのLEO衛星�
 emoji: "🛰️"
 type: "tech"
 topics:
-  - "Network"
-  - "SRv6"
-  - "BGP"
-  - "LEO"
+  - "network"
+  - "srv6"
+  - "bgp"
+  - "leo"
   - "論文読み"
 published: true
 ---
