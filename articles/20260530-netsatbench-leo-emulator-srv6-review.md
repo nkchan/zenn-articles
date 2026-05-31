@@ -8,7 +8,7 @@ topics:
   - "bgp"
   - "leo"
   - "論文読み"
-published: true
+published: false
 ---
 
 最近、個人で開発中のネットワーク監視ツール（Rust + FRR + containerlabベース）のテスト基盤を拡充する中で、大規模かつ動的なトポロジ変更をいかにエミュレーション環境へ落とし込むかという課題に直面しています。そんな中、LEO（地球低軌道）衛星ネットワークエミュレータであるNetSatBenchの論文（arXiv:2604.27854）を見つけました。
