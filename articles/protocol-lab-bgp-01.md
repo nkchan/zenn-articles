@@ -3,7 +3,7 @@ title: "BGPを2台のルータで動かして、1本の経路広告を自分の�
 emoji: "🌐"
 type: "tech"
 topics: ["bgp", "network", "containerlab", "frrouting", "rfc4271"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一部です。教材本体（実行スクリプト・サンプル設定・RFCノート）はGitHubで公開しています。
