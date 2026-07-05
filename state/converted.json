@@ -1,4 +1,5 @@
 {
   "bgp-01-as-prefix-announcement.md": "protocol-lab-bgp-01",
-  "bgp-02-update-nexthop-withdrawal.md": "protocol-lab-bgp-02"
+  "bgp-02-update-nexthop-withdrawal.md": "protocol-lab-bgp-02",
+  "bgp-03-competing-origins-route-leaks.md": "protocol-lab-bgp-03"
 }
