@@ -1,2 +1,8 @@
 node_modules
 .DS_Store
+# Zenn変換パイプライン
+work/
+# logs/ ディレクトリ自体は残す（cronの >> logs/sync.log が失敗しないように）。中身は無視。
+logs/*
+!logs/.gitkeep
+.env
