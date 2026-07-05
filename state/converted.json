@@ -1,5 +1,14 @@
 {
   "bgp-01-as-prefix-announcement.md": "protocol-lab-bgp-01",
   "bgp-02-update-nexthop-withdrawal.md": "protocol-lab-bgp-02",
-  "bgp-03-competing-origins-route-leaks.md": "protocol-lab-bgp-03"
+  "bgp-03-competing-origins-route-leaks.md": "protocol-lab-bgp-03",
+  "e2e-12-end-to-end.md": "protocol-lab-e2e-12",
+  "tcp-08-retransmission-windowing-loss.md": "protocol-lab-tcp-08",
+  "rpki-04-roa-origin-validation.md": "protocol-lab-rpki-04",
+  "http-10-requests-responses-caching.md": "protocol-lab-http-10",
+  "dns-06-caching-ttl-negative.md": "protocol-lab-dns-06",
+  "tcp-07-handshake-teardown.md": "protocol-lab-tcp-07",
+  "quic-11-http2-quic-streams.md": "protocol-lab-quic-11",
+  "tls-09-handshake-certificates.md": "protocol-lab-tls-09",
+  "dns-05-recursive-resolution.md": "protocol-lab-dns-05"
 }
