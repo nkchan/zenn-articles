@@ -3,7 +3,7 @@ title: "同じprefixを2つのASが広告する——competing originとroute le
 emoji: "🛰️"
 type: "tech"
 topics: ["bgp", "network", "security", "containerlab", "routeleak"]
-published: true
+published: false
 ---
 
 この記事は、ネットワークプロトコルを手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一部です。教材本体（実行スクリプト・サンプル設定・RFCノート）はGitHubで公開しています。
