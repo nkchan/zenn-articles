@@ -1,3 +1,4 @@
 {
-  "bgp-01-as-prefix-announcement.md": "protocol-lab-bgp-01"
+  "bgp-01-as-prefix-announcement.md": "protocol-lab-bgp-01",
+  "bgp-02-update-nexthop-withdrawal.md": "protocol-lab-bgp-02"
 }
