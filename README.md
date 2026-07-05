@@ -30,7 +30,8 @@ Kaoru の Zenn 投稿用リポジトリ。Zenn CLI が `articles/` と `books/` 
 - `scripts/sync.sh` — 未変換Labを1件だけ変換して push。1実行1記事。
 - `scripts/publish.sh <slug>` — `published: false → true` にして公開。
 - `scripts/publish-next.sh [N]` — 下書きを Lab番号順に N 本だけ公開（既定1）。Zennの1日公開上限に合わせて日々回す用。
-- `prompts/zenn-convert.md` — 変換プロンプト。
+- `prompts/zenn-convert.md` — Protocol Lab教材 → Zenn記事の変換プロンプト。
+- `prompts/zenn-article.md` — 任意プロジェクト/やったこと → Zenn記事の汎用執筆プロンプト（他の題材をこの運用に合流させる用）。
 - `state/converted.json` — 変換済み管理（冪等性の唯一の真実）。
 - 通知は Discord webhook / Telegram bot（`.env`、両対応・片方でも可）。
 
