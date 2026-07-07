@@ -3,7 +3,7 @@ title: "DNSの再帰解決を自分で追う——. → lab. → example.lab. �
 emoji: "🔎"
 type: "tech"
 topics: ["dns", "network", "bind", "containerlab", "rfc1034"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一部です。教材本体（実行スクリプト・サンプル設定・RFCノート）はGitHubで公開しています。
