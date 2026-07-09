@@ -3,7 +3,7 @@ title: "TCP接続の一生をパケットで追う——SYNからFINまでを1�
 emoji: "🤝"
 type: "tech"
 topics: ["tcp", "network", "tcpdump", "containerlab", "rfc9293"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一部です。教材本体（実行スクリプト・サンプル設定・RFCノート）はGitHubで公開しています。
