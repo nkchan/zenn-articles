@@ -10,5 +10,6 @@
   "tcp-07-handshake-teardown.md": "protocol-lab-tcp-07",
   "quic-11-http2-quic-streams.md": "protocol-lab-quic-11",
   "tls-09-handshake-certificates.md": "protocol-lab-tls-09",
-  "dns-05-recursive-resolution.md": "protocol-lab-dns-05"
+  "dns-05-recursive-resolution.md": "protocol-lab-dns-05",
+  "anycast-31-bgp.md": "protocol-lab-anycast-31"
 }
