@@ -65,3 +65,12 @@ fi
 url="https://zenn.dev/${ZENN_USERNAME}/articles/${slug}"
 notify "🚀 公開しました: ${url}"
 log "公開完了: ${url}"
+
+# --- 4. SNS告知（任意・ベストエフォート） ----------------------------------
+# .env で SOCIAL_ANNOUNCE_CMD に pipeline/social/announce.sh を指定すると
+# 公開のたびに X へ日本語ポストする。失敗しても公開処理は成功扱い。
+if [ -n "${SOCIAL_ANNOUNCE_CMD:-}" ] && [ -x "$SOCIAL_ANNOUNCE_CMD" ]; then
+  ja_title="$(awk -F'"' '/^title:/{print $2; exit}' "$article")"
+  "$SOCIAL_ANNOUNCE_CMD" --slug "$slug" --url "$url" --title "${ja_title:-$slug}" --lang ja \
+    || log "SNS告知に失敗（公開自体は完了）"
+fi
