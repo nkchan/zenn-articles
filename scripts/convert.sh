@@ -25,17 +25,27 @@ log "変換開始: $(basename "$LAB") -> articles/${slug}.md"
 input="$(cat "$PROMPT_FILE"; printf '\n\n'; cat "$LAB")"
 
 tmp="$(mktemp)"
+tmp_in="$(mktemp)"
+printf '%s' "$input" > "$tmp_in"
 # shellcheck disable=SC2064
-trap "rm -f '$tmp'" EXIT
+trap "rm -f '$tmp' '$tmp_in'" EXIT
 
 # claude -p を暴走防止(--max-turns)・タイムアウト付きで呼ぶ。
 # 変換は純粋なテキスト生成なのでツールは不要。失敗は非0で拾う。
+# 移植性: GNU/BSD どちらにも無いことがある `timeout` に依存せず、
+# bash のジョブ制御でタイムアウトを実装する（stock macOS には timeout が無い）。
 set +e
-printf '%s' "$input" | timeout "$CLAUDE_TIMEOUT" "$CLAUDE_BIN" -p \
-  --max-turns "$CLAUDE_MAX_TURNS" \
-  > "$tmp" 2> "$tmp.err"
+"$CLAUDE_BIN" -p --max-turns "$CLAUDE_MAX_TURNS" \
+  < "$tmp_in" > "$tmp" 2> "$tmp.err" &
+claude_pid=$!
+( sleep "$CLAUDE_TIMEOUT" && kill -TERM "$claude_pid" 2>/dev/null ) &
+watcher_pid=$!
+wait "$claude_pid"
 rc=$?
+kill "$watcher_pid" 2>/dev/null
+wait "$watcher_pid" 2>/dev/null
 set -e
+rm -f "$tmp_in"
 
 if [ "$rc" -ne 0 ]; then
   log "claude -p 失敗 (exit $rc)。stderr:"
@@ -53,9 +63,9 @@ if printf '%s' "$first_line" | grep -qE '^```'; then
     && mv "$tmp.stripped" "$tmp"
 fi
 
-# 先頭・末尾の空行を整える（frontmatterは1行目 --- で始まる必要がある）。
-# 先頭の空行だけ落とす。
-sed -i '/./,$!d' "$tmp"
+# 先頭の空行を落とす（frontmatterは1行目 --- で始まる必要がある）。
+# 移植性: BSD/macOS の sed -i は GNU と構文が違うため -i を使わずファイル差し替え。
+sed '/./,$!d' "$tmp" > "$tmp.trimmed" && mv "$tmp.trimmed" "$tmp"
 
 if [ ! -s "$tmp" ]; then
   die "変換結果が空だった: $(basename "$LAB")"
