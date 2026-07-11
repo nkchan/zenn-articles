@@ -15,7 +15,9 @@ count="${1:-1}"
 case "$count" in ''|*[!0-9]*) die "count は整数で指定してください: $count";; esac
 
 # 下書きの protocol-lab-*.md を NN 昇順に集める。
-mapfile -t drafts < <(
+# (mapfile ではなく while-read: macOS 標準の bash 3.2 に mapfile が無いため)
+drafts=()
+while IFS= read -r _slug; do drafts+=("$_slug"); done < <(
   for f in "$ARTICLES_DIR"/protocol-lab-*.md; do
     [ -e "$f" ] || continue
     # frontmatter先頭ブロックの published を見る
