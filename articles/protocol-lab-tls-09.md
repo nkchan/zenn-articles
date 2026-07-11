@@ -3,7 +3,7 @@ title: "TLS 1.3の暗号化が始まる前に何が見えるか——SNI・ALPN�
 emoji: "🔐"
 type: "tech"
 topics: ["tls", "security", "network", "openssl", "rfc8446"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一部です。教材本体（実行スクリプト・サンプル設定・RFCノート）はGitHubで公開しています。
