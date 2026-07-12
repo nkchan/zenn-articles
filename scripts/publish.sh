@@ -20,6 +20,13 @@ slug="${1:-}"
 redeploy=0
 [ "${2:-}" = "--redeploy" ] && redeploy=1
 
+# --- デプロイ禁止ポリシー: protocol-in-code は有償化予定のためZenn公開禁止 ------
+# 生成停止（SOURCES）に加え、公開の最終choke pointでもハード拒否する（多層防御）。
+case "$slug" in
+  protocol-in-code-*)
+    die "protocol-in-code は有償化予定のためZenn公開禁止（デプロイ抑止ポリシー）: $slug" ;;
+esac
+
 article="$ARTICLES_DIR/${slug}.md"
 [ -f "$article" ] || die "記事が見つからない: $article"
 

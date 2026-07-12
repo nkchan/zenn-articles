@@ -21,12 +21,18 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 live="$(zenn_live_slugs)" || { notify "❌ Zenn突合: 公開API取得に失敗（ネットワーク/jq）"; exit 2; }
 
-ok=(); stuck=(); drafts=(); ghost=()
+ok=(); stuck=(); drafts=(); ghost=(); incode_leak=()
 for f in "$ARTICLES_DIR"/*.md; do
   [ -e "$f" ] || continue
   slug="$(basename "$f" .md)"
   pub="$(article_published_state "$f")"
   is_live=1; printf '%s\n' "$live" | grep -qx -- "$slug" && is_live=0
+  # protocol-in-code は有償化予定でZenn非公開ポリシー。published:true か公開中なら漏れ。
+  case "$slug" in
+    protocol-in-code-*)
+      { [ "$pub" = "true" ] || [ "$is_live" -eq 0 ]; } && incode_leak+=("$slug")
+      ;;
+  esac
   if   [ "$pub" = "true"  ] && [ "$is_live" -eq 0 ]; then ok+=("$slug")
   elif [ "$pub" = "true"  ] && [ "$is_live" -ne 0 ]; then stuck+=("$slug")
   elif [ "$pub" = "false" ] && [ "$is_live" -eq 0 ]; then ghost+=("$slug")
@@ -35,12 +41,16 @@ done
 
 today="$(zenn_today_count || echo '?')"
 log "=== Zenn 公開突合 (user=${ZENN_USERNAME}) ==="
-log "公開OK ${#ok[@]} / STUCK(未公開) ${#stuck[@]} / 下書き ${#drafts[@]} / 異常(false but live) ${#ghost[@]}"
+log "公開OK ${#ok[@]} / STUCK(未公開) ${#stuck[@]} / 下書き ${#drafts[@]} / 異常(false but live) ${#ghost[@]} / in-code漏れ ${#incode_leak[@]}"
 log "本日(JST)公開済: ${today}本"
 [ "${#stuck[@]}" -gt 0 ] && log "STUCK: ${stuck[*]}"
 [ "${#ghost[@]}" -gt 0 ] && log "GHOST(published:falseなのに公開中): ${ghost[*]}"
 
 rc=0
+if [ "${#incode_leak[@]}" -gt 0 ]; then
+  notify "⛔ Zenn突合: 有償化予定の protocol-in-code がZennに出ています → ${incode_leak[*]}（published:false化＋非公開ポリシー要確認！）"
+  rc=1
+fi
 if [ "${#stuck[@]}" -gt 0 ]; then
   notify "⚠️ Zenn突合: published:true だが未公開が ${#stuck[@]}本 → ${stuck[*]}（投稿上限で保留の可能性。publish-next.sh が翌日以降に自動再デプロイ）"
   rc=1

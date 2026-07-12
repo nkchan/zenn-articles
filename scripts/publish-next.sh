@@ -43,19 +43,8 @@ collect_ordered() {  # collect_ordered <mode: stuck|draft>
     nn="$(printf '%s' "$slug" | grep -oE '[0-9]+$' || echo 999)"
     printf '%s\t%s\t%s\n' "0" "$nn" "$slug"
   done
-  # protocol-in-code-*（トラック順→NN順）
-  local ti=1 track
-  for track in $CODE_TRACK_ORDER; do
-    for f in "$ARTICLES_DIR"/protocol-in-code-"$track"-*.md; do
-      [ -e "$f" ] || continue
-      slug="$(basename "$f" .md)"
-      if [ "$mode" = stuck ]; then is_true "$f" && ! is_live "$slug" || continue
-      else is_draft "$f" || continue; fi
-      nn="$(printf '%s' "$slug" | grep -oE '[0-9]+$' || echo 999)"
-      printf '%s\t%02d%03d\t%s\n' "1" "$ti" "$nn" "$slug"
-    done
-    ti=$((ti + 1))
-  done
+  # protocol-in-code-* は有償化予定のためZenn公開しない → キューに一切載せない。
+  # （生成停止(SOURCES)＋publish.shのハード拒否と合わせた多層防御）
   # その他（series以外の one-off。stuckのみ対象。draftは対象外）
   if [ "$mode" = stuck ]; then
     for f in "$ARTICLES_DIR"/*.md; do
@@ -70,7 +59,7 @@ collect_ordered() {  # collect_ordered <mode: stuck|draft>
 
 stuck=(); while IFS= read -r s; do [ -n "$s" ] && stuck+=("$s"); done < <(collect_ordered stuck | sort | cut -f3)
 
-# --- 下書きを lab/in-code 交互に並べる ------------------------------------
+# --- 下書きを並べる（in-codeは除外済みのため実質 lab のみ。将来の交互用に構造は残す） ---
 lab_drafts=(); code_drafts=()
 while IFS= read -r s; do [ -n "$s" ] && lab_drafts+=("$s"); done  < <(collect_ordered draft | awk -F'\t' '$1==0' | sort | cut -f3)
 while IFS= read -r s; do [ -n "$s" ] && code_drafts+=("$s"); done < <(collect_ordered draft | awk -F'\t' '$1==1' | sort | cut -f3)

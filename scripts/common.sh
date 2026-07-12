@@ -41,8 +41,11 @@ export PROTOCOL_LAB_BRANCH="${PROTOCOL_LAB_BRANCH:-main}"
 export PROTOCOL_IN_CODE_REPO="${PROTOCOL_IN_CODE_REPO:-git@github.com:pathvector-studio/protocol-in-code.git}"
 export PROTOCOL_IN_CODE_BRANCH="${PROTOCOL_IN_CODE_BRANCH:-main}"
 
-# 変換ソースのリスト。片方を止めたいときは .env で SOURCES を絞る。
-export SOURCES="${SOURCES:-protocol-lab protocol-in-code}"
+# 変換ソースのリスト。
+# 注意: protocol-in-code は有償化予定のため、Zenn（無料公開）には出さない方針。
+#   既定から除外している。誤って戻しても publish.sh / publish-next.sh 側で
+#   in-code slug のデプロイをハード拒否する（多層防御）。
+export SOURCES="${SOURCES:-protocol-lab}"
 
 # protocol-in-code のトラック消化順（COURSE_MAP のコース順）。
 # アルファベット順だと教育的順序が壊れるため明示リストで持つ。
