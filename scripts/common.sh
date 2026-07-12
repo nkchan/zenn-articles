@@ -100,6 +100,12 @@ _notify_telegram() {
 
 notify() {
   local msg="$1"
+  # NOTIFY_DISABLE=1 でテスト時に実送信を抑止（.env は NOTIFY_DISABLE を設定しないため
+  # コマンドラインの値が生き残る）。
+  if [ "${NOTIFY_DISABLE:-0}" = "1" ]; then
+    log "[通知抑止] $msg"
+    return 0
+  fi
   local sent=0
   # if を使い set -e で中断しないようにする（未設定=2 / 失敗=1 は正常系）。
   if _notify_discord  "$msg"; then sent=1; fi
@@ -108,6 +114,55 @@ notify() {
     log "WARN: 通知先が未設定/全滅のためスキップ (DISCORD_WEBHOOK_URL / TELEGRAM_*): $msg"
   fi
   return 0
+}
+
+# --- Zenn 公開状況（真実）の問い合わせ ------------------------------------
+# git の published:true は「Zennに公開を依頼した」に過ぎない。実際に世に出たかの
+# 唯一の真実は Zenn の公開API。ここでは you2h（ZENN_USERNAME）の公開記事を引く。
+ZENN_API_UA="${ZENN_API_UA:-Mozilla/5.0 (zenn-pipeline health-check)}"
+
+# zenn_live_slugs … 公開中の記事slugを1行1つでstdoutに出す。API失敗時は非0。
+zenn_live_slugs() {
+  local user="${ZENN_USERNAME:-you2h}" json
+  json="$(curl -sS --max-time 25 -H "User-Agent: $ZENN_API_UA" \
+    "https://zenn.dev/api/articles?username=${user}&count=500" 2>/dev/null)" || return 1
+  [ -n "$json" ] || return 1
+  printf '%s' "$json" | jq -e -r '.articles[]?.slug' 2>/dev/null
+}
+
+# zenn_is_live <slug> [<live-slugs>] … 公開中なら0。第2引数に取得済み一覧を渡せる。
+zenn_is_live() {
+  local slug="$1" live="${2:-}"
+  [ -n "$live" ] || { live="$(zenn_live_slugs)" || return 2; }
+  printf '%s\n' "$live" | grep -qx -- "$slug"
+}
+
+# zenn_today_count … 今日(JST)公開された本数をstdoutに出す（数えられなければ ?）。
+zenn_today_count() {
+  local user="${ZENN_USERNAME:-you2h}" today
+  today="$(TZ=Asia/Tokyo date +%Y-%m-%d 2>/dev/null || date +%Y-%m-%d)"
+  curl -sS --max-time 25 -H "User-Agent: $ZENN_API_UA" \
+    "https://zenn.dev/api/articles?username=${user}&count=500" 2>/dev/null \
+    | jq -r --arg d "$today" '[.articles[]? | select(.published_at[0:10]==$d)] | length' 2>/dev/null \
+    || echo '?'
+}
+
+# verify_live <slug> [max_wait_sec] [interval_sec]
+#   Zennで公開されるまでポーリング。公開されたら0、時間切れなら1。
+#   Zennのデプロイは数分の遅延があるため publish 直後の確認に使う。
+verify_live() {
+  local slug="$1" max="${2:-${VERIFY_MAX_WAIT:-480}}" iv="${3:-${VERIFY_INTERVAL:-30}}"
+  local waited=0
+  while :; do
+    if zenn_is_live "$slug"; then return 0; fi
+    [ "$waited" -ge "$max" ] && return 1
+    sleep "$iv"; waited=$((waited + iv))
+  done
+}
+
+# article_published_state <article.md> … frontmatter先頭ブロックの published を出す。
+article_published_state() {
+  awk 'NR==1&&$0=="---"{fm=1;next} fm&&/^---[[:space:]]*$/{exit} fm&&/^published:/{gsub(/[[:space:]]/,"",$2);print $2;exit}' FS=: "$1"
 }
 
 # --- slug 生成 -----------------------------------------------------------
