@@ -11,18 +11,28 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$SCRIPT_DIR/common.sh"
 
 LAB="${1:-}"
-[ -n "$LAB" ]        || die "usage: convert.sh <path-to-lab-md>"
-[ -f "$LAB" ]        || die "Labファイルが見つからない: $LAB"
-[ -f "$PROMPT_FILE" ] || die "変換プロンプトが見つからない: $PROMPT_FILE"
+[ -n "$LAB" ]        || die "usage: convert.sh <path-to-source-md>"
+[ -f "$LAB" ]        || die "変換元ファイルが見つからない: $LAB"
 
-slug="$(slug_for_lab "$LAB")"
+# マルチソース対応の上書き（sync.sh が protocol-in-code 用に設定する）:
+#   CONVERT_PROMPT_FILE … 使うプロンプト（既定: $PROMPT_FILE = Lab用）
+#   CONVERT_SLUG        … 出力slug（既定: slug_for_lab）
+#   CONVERT_EXTRA_FILE  … 本文の後ろに引用として連結する参照ファイル（例: 対象の .py）
+prompt_file="${CONVERT_PROMPT_FILE:-$PROMPT_FILE}"
+[ -f "$prompt_file" ] || die "変換プロンプトが見つからない: $prompt_file"
+
+slug="${CONVERT_SLUG:-$(slug_for_lab "$LAB")}"
 out="$ARTICLES_DIR/${slug}.md"
 mkdir -p "$ARTICLES_DIR"
 
 log "変換開始: $(basename "$LAB") -> articles/${slug}.md"
 
-# プロンプト + Lab本文を連結して claude -p に渡す。
-input="$(cat "$PROMPT_FILE"; printf '\n\n'; cat "$LAB")"
+# プロンプト + 本文を連結して claude -p に渡す。
+input="$(cat "$prompt_file"; printf '\n\n'; cat "$LAB")"
+if [ -n "${CONVERT_EXTRA_FILE:-}" ] && [ -f "$CONVERT_EXTRA_FILE" ]; then
+  log "参照ソースを連結: $(basename "$CONVERT_EXTRA_FILE")"
+  input="$(printf '%s\n\n---\n\n# 参照: 記事が読み解く対象のソースコード（引用の原本として使う）\n\n```python\n' "$input"; cat "$CONVERT_EXTRA_FILE"; printf '\n```\n')"
+fi
 
 tmp="$(mktemp)"
 tmp_in="$(mktemp)"

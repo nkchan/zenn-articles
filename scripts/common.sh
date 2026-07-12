@@ -20,6 +20,8 @@ export LOGS_DIR="$REPO_DIR/logs"
 export CONVERTED_JSON="$STATE_DIR/converted.json"
 export PROMPT_FILE="$PROMPTS_DIR/zenn-convert.md"
 export LAB_CLONE_DIR="$WORK_DIR/protocol-lab"
+export CODE_PROMPT_FILE="$PROMPTS_DIR/zenn-convert-in-code.md"
+export CODE_CLONE_DIR="$WORK_DIR/protocol-in-code"
 
 # --- .env 読み込み -------------------------------------------------------
 if [ -f "$REPO_DIR/.env" ]; then
@@ -36,6 +38,15 @@ export CLAUDE_MAX_TURNS="${CLAUDE_MAX_TURNS:-1}"
 export ZENN_USERNAME="${ZENN_USERNAME:-nkchan}"
 export PROTOCOL_LAB_REPO="${PROTOCOL_LAB_REPO:-git@github.com:pathvector-studio/protocol-lab.git}"
 export PROTOCOL_LAB_BRANCH="${PROTOCOL_LAB_BRANCH:-main}"
+export PROTOCOL_IN_CODE_REPO="${PROTOCOL_IN_CODE_REPO:-git@github.com:pathvector-studio/protocol-in-code.git}"
+export PROTOCOL_IN_CODE_BRANCH="${PROTOCOL_IN_CODE_BRANCH:-main}"
+
+# 変換ソースのリスト。片方を止めたいときは .env で SOURCES を絞る。
+export SOURCES="${SOURCES:-protocol-lab protocol-in-code}"
+
+# protocol-in-code のトラック消化順（COURSE_MAP のコース順）。
+# アルファベット順だと教育的順序が壊れるため明示リストで持つ。
+export CODE_TRACK_ORDER="${CODE_TRACK_ORDER:-bgp ospf dns tcp tls http-quic parser rpki dhcp rip nat arp qos lb ntp ha icmp dnssec tcp2 stp ice igmp meta}"
 
 # --- ログ ----------------------------------------------------------------
 # ログは stderr に出す。stdout は convert.sh の slug 出力など「値」専用に空けておく。
@@ -121,6 +132,28 @@ slug_for_lab() {
   fi
   # 12字下限（万一短ければパディング）。実運用のLab名では発生しない。
   while [ "${#slug}" -lt 12 ]; do slug="${slug}-lab"; done
+  printf '%s' "$slug"
+}
+
+# slug_for_module <module-file.md> <track>
+# protocol-in-code の module ファイル名から protocol-in-code-<track>-<NN> を作る。
+#   例: module-01-a-segment-carries-state.md + tcp -> protocol-in-code-tcp-01
+# Zenn制約（英小文字/数字/ハイフン/アンダースコア、12〜50字）は slug_for_lab と同じ。
+slug_for_module() {
+  local f track base nn slug
+  f="$1"
+  track="$2"
+  base="$(basename "$f")"
+  base="${base%.md}"
+  nn="$(printf '%s' "$base" | sed -nE 's/^module-([0-9]+).*/\1/p')"
+  [ -z "$nn" ] && nn="$base"
+  slug="protocol-in-code-${track}-${nn}"
+  slug="$(printf '%s' "$slug" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9_-]+/-/g; s/-+/-/g; s/^-+//; s/-+$//')"
+  if [ "${#slug}" -gt 50 ]; then
+    slug="${slug:0:50}"
+    slug="$(printf '%s' "$slug" | sed -E 's/-+$//')"
+  fi
+  while [ "${#slug}" -lt 12 ]; do slug="${slug}-mod"; done
   printf '%s' "$slug"
 }
 
