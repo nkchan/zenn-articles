@@ -21,7 +21,14 @@ LOG="$LOGS_DIR/daily-$day.log"
 
 {
   log "===== daily.sh 開始 (count=$count) ====="
-  "$SCRIPTS_DIR/publish-next.sh" "$count" || log "publish-next.sh 非0終了 ($?)"
-  "$SCRIPTS_DIR/status.sh"                 || log "status.sh: STUCK残り(exit1) または API失敗(exit2)"
+  # 変換エンジン(Mac mini の claude -p)が push した新しい下書きを取り込む。
+  # ff-only で安全に。分岐/衝突していたら publish は行わず中止（壊さない）。
+  if git -C "$REPO_DIR" pull --ff-only origin main; then
+    "$SCRIPTS_DIR/publish-next.sh" "$count" || log "publish-next.sh 非0終了 ($?)"
+    "$SCRIPTS_DIR/status.sh"                 || log "status.sh: STUCK残り(exit1) または API失敗(exit2)"
+  else
+    log "git pull --ff-only 失敗（分岐/衝突の可能性）。今回は publish を中止。"
+    notify "⚠️ Zenn日次: git pull に失敗したため公開を中止しました。手動確認要（cd zenn-articles && git status）。"
+  fi
   log "===== daily.sh 終了 ====="
 } >>"$LOG" 2>&1
