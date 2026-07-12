@@ -3,7 +3,7 @@ title: "ネットワークプロトコル学習ロードマップ — 42本の�
 emoji: "🗺️"
 type: "tech"
 topics: ["network", "protocol", "roadmap", "python", "containerlab"]
-published: false
+published: true
 ---
 
 「ネットワークを学びたい」と思ったとき、いちばん難しいのは**順番**です。TCP/IPの本は分厚く、RFCは無限にあり、資格教材は暗記に寄りがち。この記事は、筆者が公開しているフリー教材2コース——手を動かす入門編 **Protocol Lab**（42 Lab）と、プロトコルをコードとして読む中級編 **Protocol in Code**（23トラック / 151セッション）——を素材に、**目的別の歩き方**をまとめたロードマップです。
