@@ -3,7 +3,7 @@ title: "HTTP/2のstream多重化とQUICへの跳躍——TCPのhead-of-line bloc
 emoji: "🚀"
 type: "tech"
 topics: ["http", "quic", "network", "caddy", "rfc9000"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一部です。教材本体（実行スクリプト・サンプル設定・RFCノート）はGitHubで公開しています。
