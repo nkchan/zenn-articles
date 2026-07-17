@@ -3,7 +3,7 @@ title: "1つのWebリクエストをend-to-endで追う——DNS→TCP→TLS→H
 emoji: "🧩"
 type: "tech"
 topics: ["network", "dns", "tls", "http", "containerlab"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一部です。教材本体（実行スクリプト・サンプル設定・RFCノート）はGitHubで公開しています。
