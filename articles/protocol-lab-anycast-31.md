@@ -3,7 +3,7 @@ title: "Anycast入門: 同じIPアドレスを複数サーバに持たせ、BGP�
 emoji: "🛰️"
 type: "tech"
 topics: ["bgp", "anycast", "network", "containerlab", "dns"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを実際に手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一部です。containerlab を使って小さなトポロジを組み、プロトコルの挙動を自分の目で観察していきます。
