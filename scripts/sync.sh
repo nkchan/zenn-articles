@@ -82,6 +82,14 @@ convert_and_ship() {
   fi
 
   if git -C "$REPO_DIR" remote get-url origin >/dev/null 2>&1; then
+    # 他ホスト（publish側）が先にpushしていると non-fast-forward で落ちるため、
+    # push前にリモートを取り込む。rebase失敗時はabortして従来どおりpush失敗扱い。
+    local branch
+    branch="$(git -C "$REPO_DIR" rev-parse --abbrev-ref HEAD)"
+    if git -C "$REPO_DIR" fetch --quiet origin "$branch"; then
+      git -C "$REPO_DIR" rebase --quiet "origin/$branch" \
+        || { git -C "$REPO_DIR" rebase --abort 2>/dev/null; log "rebase に失敗（push は失敗する見込み）"; }
+    fi
     if git -C "$REPO_DIR" push --quiet origin HEAD; then
       log "push 完了"
     else
