@@ -12,5 +12,6 @@
   "tls-09-handshake-certificates.md": "protocol-lab-tls-09",
   "dns-05-recursive-resolution.md": "protocol-lab-dns-05",
   "anycast-31-bgp.md": "protocol-lab-anycast-31",
-  "arp-24-address-resolution.md": "protocol-lab-arp-24"
+  "arp-24-address-resolution.md": "protocol-lab-arp-24",
+  "bfd-35-fast-failure-detection.md": "protocol-lab-bfd-35"
 }
