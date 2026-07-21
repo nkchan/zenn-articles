@@ -3,7 +3,7 @@ title: "ARPを2台のノードで動かして、IP→MAC解決を自分の言葉
 emoji: "🔌"
 type: "tech"
 topics: ["arp", "network", "containerlab", "ipv4", "ethernet"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一部です。実際に2台のノードを1本のリンクで繋ぎ、パケットキャプチャを見ながら「なぜそう動くのか」を確かめていきます。
