@@ -3,7 +3,7 @@ title: "BFDでリンクは生きているのに転送だけ死ぬ「サイレン
 emoji: "🛰️"
 type: "tech"
 topics: ["bfd", "ospf", "network", "containerlab", "frr"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一部です。実際に containerlab でトポロジを立ち上げ、コマンドを叩きながら「なぜそう動くのか」を自分の言葉で説明できるようになることを目指しています。
