@@ -3,7 +3,7 @@ title: "TCPは同じ回線でも速さが7倍変わる — CUBIC と BBR を los
 emoji: "🛰️"
 type: "tech"
 topics: ["tcp", "bbr", "network", "containerlab", "congestion"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一編です。教材本体・他の Lab・実行スクリプトはすべて GitHub で公開しています。
