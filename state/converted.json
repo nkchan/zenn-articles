@@ -15,5 +15,6 @@
   "arp-24-address-resolution.md": "protocol-lab-arp-24",
   "bfd-35-fast-failure-detection.md": "protocol-lab-bfd-35",
   "cc-30-congestion-control.md": "protocol-lab-cc-30",
-  "dane-17-dane-tlsa.md": "protocol-lab-dane-17"
+  "dane-17-dane-tlsa.md": "protocol-lab-dane-17",
+  "dhcp-22-dora.md": "protocol-lab-dhcp-22"
 }
