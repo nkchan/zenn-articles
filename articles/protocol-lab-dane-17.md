@@ -3,7 +3,7 @@ title: "DANE入門: DNSに証明書を保証させる — CAなしで自己署�
 emoji: "🔐"
 type: "tech"
 topics: ["dane", "dnssec", "tls", "network", "containerlab"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一部です。各Labは、実際にコンテナでプロトコルを動かし、パケットや出力を自分の目で確かめながら「なぜそう動くのか」を言葉にできるようになることを目指しています。
