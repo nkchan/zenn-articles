@@ -3,7 +3,7 @@ title: "DHCP：IPを持たないマシンが4つのメッセージ（DORA）で�
 emoji: "🛰️"
 type: "tech"
 topics: ["dhcp", "network", "containerlab", "tcpdump", "udp"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かしながら学ぶフリー教材シリーズ **Protocol Lab** の一部です。実際にコンテナでルータやホストを組み、パケットをキャプチャしながら、プロトコルの動きを「自分の言葉で説明できる」ところまで持っていくことを狙っています。
