@@ -16,5 +16,6 @@
   "bfd-35-fast-failure-detection.md": "protocol-lab-bfd-35",
   "cc-30-congestion-control.md": "protocol-lab-cc-30",
   "dane-17-dane-tlsa.md": "protocol-lab-dane-17",
-  "dhcp-22-dora.md": "protocol-lab-dhcp-22"
+  "dhcp-22-dora.md": "protocol-lab-dhcp-22",
+  "dnat-40-port-forwarding.md": "protocol-lab-dnat-40"
 }
