@@ -3,7 +3,7 @@ title: "DNATでポートフォワードを理解する — 公開アドレス経
 emoji: "🌐"
 type: "tech"
 topics: ["dnat", "nat", "network", "containerlab", "iptables"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一編です。各 Lab は containerlab で小さなトポロジを立て、コマンドを叩きながら「なぜそう動くのか」を自分の言葉で説明できるようになることを目指しています。
