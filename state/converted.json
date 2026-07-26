@@ -17,5 +17,6 @@
   "cc-30-congestion-control.md": "protocol-lab-cc-30",
   "dane-17-dane-tlsa.md": "protocol-lab-dane-17",
   "dhcp-22-dora.md": "protocol-lab-dhcp-22",
-  "dnat-40-port-forwarding.md": "protocol-lab-dnat-40"
+  "dnat-40-port-forwarding.md": "protocol-lab-dnat-40",
+  "dns-13-dnssec-validation.md": "protocol-lab-dns-13"
 }
