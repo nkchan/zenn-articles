@@ -3,7 +3,7 @@ title: "DNSSECを手元で壊してみる — 署名・trust anchor・ADフラ�
 emoji: "🔐"
 type: "tech"
 topics: ["dns", "dnssec", "network", "containerlab", "bind"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを実際に動かして学ぶフリー教材シリーズ **Protocol Lab** の一部です。Lab の元データ（トポロジ定義・設定ファイル・検証スクリプト）はすべて GitHub で公開しています。
