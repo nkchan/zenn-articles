@@ -19,5 +19,6 @@
   "dhcp-22-dora.md": "protocol-lab-dhcp-22",
   "dnat-40-port-forwarding.md": "protocol-lab-dnat-40",
   "dns-13-dnssec-validation.md": "protocol-lab-dns-13",
-  "dns-14-encrypted-dns-dot-doh.md": "protocol-lab-dns-14"
+  "dns-14-encrypted-dns-dot-doh.md": "protocol-lab-dns-14",
+  "dns-views-42-split-horizon.md": "protocol-lab-dns-views-42-split-horizon"
 }
