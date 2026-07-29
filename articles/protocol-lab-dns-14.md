@@ -3,7 +3,7 @@ title: "DNSの問い合わせは丸見えだった — Do53 / DoT / DoH を同�
 emoji: "🔐"
 type: "tech"
 topics: ["dns", "dot", "doh", "tls", "containerlab"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一部です。すべてのLabのソース（containerlabのトポロジ、設定ファイル、実行スクリプト）は以下のリポジトリで公開しています。
