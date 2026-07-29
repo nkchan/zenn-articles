@@ -21,5 +21,6 @@
   "dns-13-dnssec-validation.md": "protocol-lab-dns-13",
   "dns-14-encrypted-dns-dot-doh.md": "protocol-lab-dns-14",
   "dns-views-42-split-horizon.md": "protocol-lab-dns-views-42-split-horizon",
-  "dnsrr-41-round-robin.md": "protocol-lab-dnsrr-41"
+  "dnsrr-41-round-robin.md": "protocol-lab-dnsrr-41",
+  "ecmp-32-multipath.md": "protocol-lab-ecmp-32"
 }
