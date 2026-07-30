@@ -3,7 +3,7 @@ title: "ECMP入門: 2本の等コスト経路をLinuxカーネルがどうflow�
 emoji: "🔀"
 type: "tech"
 topics: ["bgp", "network", "containerlab", "ecmp", "linux"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一部です。全Labのソース（containerlabのトポロジ定義、設定ファイル、検証スクリプト）は以下のリポジトリで公開しています。
