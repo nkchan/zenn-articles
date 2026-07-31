@@ -23,5 +23,6 @@
   "dns-views-42-split-horizon.md": "protocol-lab-dns-views-42-split-horizon",
   "dnsrr-41-round-robin.md": "protocol-lab-dnsrr-41",
   "ecmp-32-multipath.md": "protocol-lab-ecmp-32",
-  "fw-36-stateful-firewall.md": "protocol-lab-fw-36"
+  "fw-36-stateful-firewall.md": "protocol-lab-fw-36",
+  "gre-21-l3-tunnel.md": "protocol-lab-gre-21"
 }
