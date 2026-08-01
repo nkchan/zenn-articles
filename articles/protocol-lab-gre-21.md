@@ -3,7 +3,7 @@ title: "GRE で L3 トンネルを張って、「カプセル化」と「暗号�
 emoji: "🔌"
 type: "tech"
 topics: ["gre", "network", "containerlab", "tunnel", "vxlan"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一部です。RFC を読みながら実際にパケットを流し、「なぜそう動くのか」を自分の言葉で説明できるようになることを目指しています。
