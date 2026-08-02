@@ -25,5 +25,6 @@
   "ecmp-32-multipath.md": "protocol-lab-ecmp-32",
   "fw-36-stateful-firewall.md": "protocol-lab-fw-36",
   "gre-21-l3-tunnel.md": "protocol-lab-gre-21",
-  "http-27-redirects-cookies.md": "protocol-lab-http-27"
+  "http-27-redirects-cookies.md": "protocol-lab-http-27",
+  "lb-33-ipvs.md": "protocol-lab-lb-33"
 }
