@@ -3,7 +3,7 @@ title: "HTTPはstatelessなのに、なぜログイン状態が続くのか — 
 emoji: "🍪"
 type: "tech"
 topics: ["http", "network", "containerlab", "curl", "cookie"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを「手を動かして理解する」ためのフリー教材シリーズ **Protocol Lab** の一部です。教材本体・他のLab・実行スクリプトはすべて以下のリポジトリで公開しています。
