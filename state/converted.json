@@ -27,5 +27,6 @@
   "gre-21-l3-tunnel.md": "protocol-lab-gre-21",
   "http-27-redirects-cookies.md": "protocol-lab-http-27",
   "lb-33-ipvs.md": "protocol-lab-lb-33",
-  "mcast-29-igmp.md": "protocol-lab-mcast-29"
+  "mcast-29-igmp.md": "protocol-lab-mcast-29",
+  "mss-37-clamping.md": "protocol-lab-mss-37"
 }
