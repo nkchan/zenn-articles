@@ -3,7 +3,7 @@ title: "1回の送信が全員に届く: multicast と IGMP を containerlab で
 emoji: "📡"
 type: "tech"
 topics: ["multicast", "igmp", "network", "containerlab", "linux"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一部です。全Labのソース（トポロジ定義・スクリプト・RFCノート）はGitHubで公開しています。
