@@ -3,7 +3,7 @@ title: "ステートフルファイアウォールを2台+ルータで動かし�
 emoji: "🧱"
 type: "tech"
 topics: ["network", "firewall", "iptables", "conntrack", "containerlab"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一部です。Lab の元データ、トポロジ定義、実行スクリプトはすべて GitHub で公開しています。
