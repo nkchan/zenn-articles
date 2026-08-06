@@ -105,7 +105,9 @@ fi
 
 # --- 4. SNS告知（任意・ベストエフォート） ----------------------------------
 # .env で SOCIAL_ANNOUNCE_CMD に pipeline/social/announce.sh を指定すると
-# 公開のたびに X へ日本語ポストする。失敗しても公開処理は成功扱い。
+# 公開のたびに Bluesky へ日本語ポストする。X は announce.sh の担当ではなく
+# IFTTT の RSS アプレット（Zenn フィード監視）が独立に投稿する。
+# 失敗しても公開処理は成功扱い。
 # 公開が確認できた記事のみ告知する（保留中は exit 3 済みでここには来ない）。
 if [ -n "${SOCIAL_ANNOUNCE_CMD:-}" ] && [ -x "$SOCIAL_ANNOUNCE_CMD" ]; then
   ja_title="$(awk -F'"' '/^title:/{print $2; exit}' "$article")"
