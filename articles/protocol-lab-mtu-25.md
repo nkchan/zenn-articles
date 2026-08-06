@@ -3,7 +3,7 @@ title: "MTUの狭い門をルータに教えてもらう — Path MTU Discovery�
 emoji: "🌐"
 type: "tech"
 topics: ["network", "mtu", "icmp", "containerlab", "tcp"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一部です。教材本体・他のLab・スクリプトはすべてGitHubで公開しています。
