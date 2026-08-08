@@ -3,7 +3,7 @@ title: "TCP MSS clamping を手を動かして理解する — 一番細いリ�
 emoji: "🔌"
 type: "tech"
 topics: ["tcp", "network", "containerlab", "mtu", "linux"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを「動かして理解する」フリー教材シリーズ **Protocol Lab** の一部です。教材本体・他のLab・検証用の構成ファイルはすべて以下のリポジトリで公開しています。
