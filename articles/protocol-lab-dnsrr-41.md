@@ -3,7 +3,7 @@ title: "DNSラウンドロビン入門 — 1つの名前・3つのAレコード�
 emoji: "🛰️"
 type: "tech"
 topics: ["dns", "network", "containerlab", "bind", "loadbalancing"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かしながら学ぶフリー教材シリーズ **Protocol Lab** の一部です。実際にコンテナでラボ環境を立ち上げ、プロトコルの挙動を自分の目で確認しながら進めます。
