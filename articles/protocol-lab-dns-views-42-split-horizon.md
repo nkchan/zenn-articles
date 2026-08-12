@@ -3,7 +3,7 @@ title: "Split-Horizon DNS: 同じ名前が「誰が聞いたか」で違う答�
 emoji: "🛰️"
 type: "tech"
 topics: ["dns", "bind", "network", "containerlab"]
-published: false
+published: true
 ---
 
 この記事は、ネットワークプロトコルを手を動かして学ぶフリー教材シリーズ **Protocol Lab** の一部です。すべてのLab（構成ファイル・スクリプト・RFCノート）は以下のリポジトリで公開しています。
