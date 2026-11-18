@@ -29,7 +29,18 @@ Kaoru の Zenn 投稿用リポジトリ。Zenn CLI が `articles/` と `books/` 
 - `scripts/convert.sh <lab.md>` — 単発変換。slug は `protocol-lab-<proto>-<NN>` で固定生成。
 - `scripts/sync.sh` — 未変換Labを1件だけ変換して push。1実行1記事。
 - `scripts/publish.sh <slug>` — `published: false → true` にして公開。
-- `scripts/publish-next.sh [N]` — 下書きを Lab番号順に N 本だけ公開（既定1）。Zennの1日公開上限に合わせて日々回す用。
+- `scripts/publish-next.sh` — 公開待ちを**1本だけ**公開する（N を渡しても 1 に丸める）。順番は STUCK（上限で保留された記事）→ `state/publish-queue.txt` → protocol-lab の下書き。
+- `scripts/daily.sh` — 毎日の cron 用。`publish-next.sh` と `status.sh` を回す。
+- `state/publish-queue.txt` — Kaoru が公開を OK した記事の順番待ち（1行1 slug）。記事は `published: false` のまま `articles/` に置いておく。
+
+### 公開ペースのルール（Zenn の投稿数上限対策）
+
+詳細は `pathvector-studio/ops` の `docs/zenn.md`。
+
+- 新規公開は1回に1本。前回の新規公開から `MIN_PUBLISH_INTERVAL_HOURS`（既定47h）経つまで、`publish.sh` も `publish-next.sh` も公開しない。毎日同じ時刻の cron なら2日に1本になる
+- 前回の公開時刻は Zenn の公開 API と git の `articles: publish` コミットの新しい方で判定する（API が落ちていても守れるように）
+- どうしても今すぐ出すときだけ `FORCE_PUBLISH=1 ./scripts/publish.sh <slug>`
+- 本（`books/`）はスクリプトでは公開しない。副業許可が出るまで有料本は出さない
 - `prompts/zenn-convert.md` — Protocol Lab教材 → Zenn記事の変換プロンプト。
 - `prompts/zenn-article.md` — 任意プロジェクト/やったこと → Zenn記事の汎用執筆プロンプト（他の題材をこの運用に合流させる用）。
 - `state/converted.json` — 変換済み管理（冪等性の唯一の真実）。
@@ -40,6 +51,7 @@ Zenn の GitHub 連携はこのリポジトリで設定済み。cron 例:
 
 ```
 0 9 * * 1 cd /path/to/zenn-articles && ./scripts/sync.sh >> logs/sync.log 2>&1
+10 9 * * * cd /path/to/zenn-articles && ./scripts/daily.sh >> logs/cron.log 2>&1
 ```
 
 > 既存の手書き記事 `articles/20260512-bgp-lab-01-one-prefix.md`（BGP Lab 01）は

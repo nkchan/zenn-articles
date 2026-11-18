@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# daily.sh [count] — 日次の cron エントリポイント。
+# daily.sh — 日次の cron エントリポイント（毎日回してよい。公開は2日に1本に自己制限）。
 #   1. publish-next.sh <count>  … STUCK(上限で保留された記事)を最優先で再デプロイ→
-#      残枠で下書きを交互公開。上限に当たったら自動停止（自己スロットル）。既定 count=2。
+#      承認キュー→下書きの順に1本だけ公開。前回公開から47h未満なら何もしない。
 #   2. status.sh                … 実行後にgit状態とZenn実公開を突合。STUCKが残ればアラート。
 #
 # ログは logs/daily-YYYYMMDD.log（JST）に追記。cron からは:
-#   10 9 * * * cd .../zenn-articles && ./scripts/daily.sh 2 >> logs/cron.log 2>&1
+#   10 9 * * * cd .../zenn-articles && ./scripts/daily.sh >> logs/cron.log 2>&1
 set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -15,7 +15,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # cron は ssh-agent を持たないため、鍵直参照の非対話pushを既定にする。
 export GIT_SSH_COMMAND="${GIT_SSH_COMMAND:-ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new}"
 
-count="${1:-2}"
+count="${1:-1}"
 day="$(TZ=Asia/Tokyo date +%Y%m%d 2>/dev/null || date +%Y%m%d)"
 LOG="$LOGS_DIR/daily-$day.log"
 
