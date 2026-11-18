@@ -5,5 +5,5 @@ summary: |
   までを、実際に動く Python コードとして追いかけます。各章は「元コード → 判断の流れ → 自分で答える問い →
   動かして確認」の順で進みます。序章と第1章は無料で試し読みできます。
 topics: ["tcp", "network", "python", "プロトコル"]
-published: true
+published: false
 price: 300
