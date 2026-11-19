@@ -35,7 +35,7 @@ fi
 export CLAUDE_BIN="${CLAUDE_BIN:-claude}"
 export CLAUDE_TIMEOUT="${CLAUDE_TIMEOUT:-600}"
 export CLAUDE_MAX_TURNS="${CLAUDE_MAX_TURNS:-1}"
-export ZENN_USERNAME="${ZENN_USERNAME:-nkchan}"
+export ZENN_USERNAME="${ZENN_USERNAME:-you2h}"
 export PROTOCOL_LAB_REPO="${PROTOCOL_LAB_REPO:-git@github.com:pathvector-studio/protocol-lab.git}"
 export PROTOCOL_LAB_BRANCH="${PROTOCOL_LAB_BRANCH:-main}"
 export PROTOCOL_IN_CODE_REPO="${PROTOCOL_IN_CODE_REPO:-git@github.com:pathvector-studio/protocol-in-code.git}"
@@ -175,7 +175,7 @@ verify_live() {
 # zenn_last_published_epoch … Zenn で最後に公開された記事の時刻（epoch 秒）。記事が無ければ 0。API 失敗は非0。
 #   published_at は "2026-08-13T09:10:03.123+09:00" 形式。jq でオフセットを解釈する。
 zenn_last_published_epoch() {
-  local user="${ZENN_USERNAME:-nkchan}" json
+  local user="${ZENN_USERNAME:-you2h}" json
   json="$(curl -sS --max-time 25 -H "User-Agent: $ZENN_API_UA" \
     "https://zenn.dev/api/articles?username=${user}&count=500" 2>/dev/null)" || return 1
   [ -n "$json" ] || return 1
