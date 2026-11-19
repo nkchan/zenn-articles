@@ -27,6 +27,14 @@ case "$slug" in
     die "protocol-in-code は有償化予定のためZenn公開禁止（デプロイ抑止ポリシー）: $slug" ;;
 esac
 
+# --- 公開間隔のガード（手動実行でも Zenn の投稿数上限を踏まない。ops docs/zenn.md） ---
+# 意図して破るときだけ FORCE_PUBLISH=1。
+if [ "${FORCE_PUBLISH:-0}" != "1" ]; then
+  if ! wait_h="$(publish_interval_ok)"; then
+    die "前回の公開から ${MIN_PUBLISH_INTERVAL_HOURS}h 経っていません（あと約 ${wait_h}h）。上限で弾かれるので待つこと（強行は FORCE_PUBLISH=1）"
+  fi
+fi
+
 article="$ARTICLES_DIR/${slug}.md"
 [ -f "$article" ] || die "記事が見つからない: $article"
 

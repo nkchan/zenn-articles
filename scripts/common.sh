@@ -47,6 +47,14 @@ export PROTOCOL_IN_CODE_BRANCH="${PROTOCOL_IN_CODE_BRANCH:-main}"
 #   in-code slug のデプロイをハード拒否する（多層防御）。
 export SOURCES="${SOURCES:-protocol-lab}"
 
+# --- 公開ペース（Zenn 投稿数上限対策。pathvector-studio/ops docs/zenn.md） ---
+# Zenn の記事上限は「直近24時間の投稿数」で判定され、数は非公開。
+# 新規公開は1回に1本、前回の新規公開から MIN_PUBLISH_INTERVAL_HOURS 以上空ける。
+# 既定 47h = 毎日同時刻の cron で「2日に1本」（48h ちょうどだと cron の揺れで見送られて3日に延びる）。
+export MIN_PUBLISH_INTERVAL_HOURS="${MIN_PUBLISH_INTERVAL_HOURS:-47}"
+# Kaoru が公開を承認した記事の順番待ち（1行1 slug、# 以降はコメント）。protocol-lab の下書きより先に出す。
+export PUBLISH_QUEUE="${PUBLISH_QUEUE:-$STATE_DIR/publish-queue.txt}"
+
 # protocol-in-code のトラック消化順（COURSE_MAP のコース順）。
 # アルファベット順だと教育的順序が壊れるため明示リストで持つ。
 export CODE_TRACK_ORDER="${CODE_TRACK_ORDER:-bgp ospf dns tcp tls http-quic parser rpki dhcp rip nat arp qos lb ntp ha icmp dnssec tcp2 stp ice igmp meta}"
@@ -161,6 +169,51 @@ verify_live() {
     [ "$waited" -ge "$max" ] && return 1
     sleep "$iv"; waited=$((waited + iv))
   done
+}
+
+# --- 公開間隔のガード ------------------------------------------------------
+# zenn_last_published_epoch … Zenn で最後に公開された記事の時刻（epoch 秒）。記事が無ければ 0。API 失敗は非0。
+#   published_at は "2026-08-13T09:10:03.123+09:00" 形式。jq でオフセットを解釈する。
+zenn_last_published_epoch() {
+  local user="${ZENN_USERNAME:-nkchan}" json
+  json="$(curl -sS --max-time 25 -H "User-Agent: $ZENN_API_UA" \
+    "https://zenn.dev/api/articles?username=${user}&count=500" 2>/dev/null)" || return 1
+  [ -n "$json" ] || return 1
+  printf '%s' "$json" | jq -e -r '
+    def epoch:
+      (.[0:19] + "Z" | fromdateiso8601)
+      - ( (capture("(?<s>[+-])(?<h>[0-9]{2}):(?<m>[0-9]{2})$") // null)
+          | if . == null then 0
+            else ((.h|tonumber)*3600 + (.m|tonumber)*60) * (if .s == "-" then -1 else 1 end) end );
+    [ .articles[]?.published_at | select(. != null) | epoch ] | (max // 0) | floor' 2>/dev/null
+}
+
+# git_last_publish_epoch … このリポジトリで最後に記事を公開したコミットの時刻（epoch 秒）。無ければ 0。
+#   Zenn API が落ちていても間隔を守れるよう、git の記録も見る（大きい方を採る）。
+git_last_publish_epoch() {
+  local t
+  t="$(git -C "$REPO_DIR" log -1 --format=%ct -E --grep='^articles: publish' 2>/dev/null || true)"
+  printf '%s' "${t:-0}"
+}
+
+# publish_interval_ok … 前回の新規公開から MIN_PUBLISH_INTERVAL_HOURS 以上経っていれば 0。
+#   足りなければ 1 を返し、stdout に「あと何時間か」を出す。
+publish_interval_ok() {
+  local api git last now need
+  api="$(zenn_last_published_epoch)" || { log "WARN: Zenn API で前回公開時刻を取れず。git の記録だけで判定"; api=0; }
+  git="$(git_last_publish_epoch)"
+  last="$api"; [ "$git" -gt "$last" ] && last="$git"
+  now="$(date +%s)"
+  need=$(( MIN_PUBLISH_INTERVAL_HOURS * 3600 ))
+  if [ $(( now - last )) -ge "$need" ]; then return 0; fi
+  printf '%s' "$(( (need - (now - last) + 3599) / 3600 ))"
+  return 1
+}
+
+# queued_slugs … publish-queue.txt の slug を順に出す（空行・コメントは除く）。
+queued_slugs() {
+  [ -f "$PUBLISH_QUEUE" ] || return 0
+  sed -e 's/#.*//' -e 's/[[:space:]]//g' "$PUBLISH_QUEUE" | grep -v '^$' || true
 }
 
 # article_published_state <article.md> … frontmatter先頭ブロックの published を出す。

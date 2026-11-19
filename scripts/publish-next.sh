@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # publish-next.sh [count]
-# Zennへの日次ドリップ公開ドライバ。既定 count=2（Zenn上限の観測値に合わせる）。
+# Zennへの日次ドリップ公開ドライバ。1回に公開するのは1本だけ（count は 1 に丸める）。
+# 前回の新規公開から MIN_PUBLISH_INTERVAL_HOURS（既定47h）経っていなければ何もしない。
+# 順番: STUCK（上限で保留された記事）→ state/publish-queue.txt（Kaoru 承認済み）→ protocol-lab の下書き。
+# ルールの出典: pathvector-studio/ops docs/zenn.md
 #
 # Zennには投稿数上限があり、超過分は「デプロイされませんでした」と黙って保留される。
 # そこで本スクリプトは次の順で「実際に公開されるまで」を面倒みる:
@@ -20,8 +23,20 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=common.sh
 . "$SCRIPT_DIR/common.sh"
 
-count="${1:-2}"
+count="${1:-1}"
 case "$count" in ''|*[!0-9]*) die "count は整数で指定してください: $count";; esac
+if [ "$count" -gt 1 ]; then
+  log "count=$count は Zenn の投稿数上限に当たるため 1 に丸めます（ops docs/zenn.md）"
+  count=1
+fi
+
+# --- 公開間隔のガード（STUCK の再デプロイも新規投稿として数えられるので先に判定） ---
+if [ "${DRY_RUN:-0}" != "1" ] || [ "${DRY_RUN_CHECK_INTERVAL:-0}" = "1" ]; then
+  if ! wait_h="$(publish_interval_ok)"; then
+    log "前回の公開から ${MIN_PUBLISH_INTERVAL_HOURS}h 経っていないため今回は見送り（あと約 ${wait_h}h）"
+    exit 0
+  fi
+fi
 
 # Zennの実公開一覧（真実）を1回だけ取得。取得できなければ STUCK 判定ができないので中断。
 live="$(zenn_live_slugs)" || die "Zenn公開API取得に失敗（ネットワーク/jq）。突合できないため中止。"
@@ -59,12 +74,22 @@ collect_ordered() {  # collect_ordered <mode: stuck|draft>
 
 stuck=(); while IFS= read -r s; do [ -n "$s" ] && stuck+=("$s"); done < <(collect_ordered stuck | sort | cut -f3)
 
-# --- 下書きを並べる（in-codeは除外済みのため実質 lab のみ。将来の交互用に構造は残す） ---
+# --- 下書きを並べる（キュー → lab。in-codeは除外済み。将来の交互用に構造は残す） ---
+# 承認済みキュー（publish-queue.txt）を先頭に。protocol-in-code はここでも載せない。
+queue_drafts=()
+while IFS= read -r s; do
+  [ -n "$s" ] || continue
+  case "$s" in protocol-in-code-*) log "WARN: キューの $s は公開禁止のため無視"; continue;; esac
+  f="$ARTICLES_DIR/${s}.md"
+  if [ ! -f "$f" ]; then log "WARN: キューの $s に記事ファイルが無い（未マージ？）。飛ばす"; continue; fi
+  is_draft "$f" && queue_drafts+=("$s")
+done < <(queued_slugs)
+
 lab_drafts=(); code_drafts=()
 while IFS= read -r s; do [ -n "$s" ] && lab_drafts+=("$s"); done  < <(collect_ordered draft | awk -F'\t' '$1==0' | sort | cut -f3)
 while IFS= read -r s; do [ -n "$s" ] && code_drafts+=("$s"); done < <(collect_ordered draft | awk -F'\t' '$1==1' | sort | cut -f3)
 
-draft_queue=(); li=0; ci=0; turn="lab"
+draft_queue=("${queue_drafts[@]+"${queue_drafts[@]}"}"); li=0; ci=0; turn="lab"
 while [ "$li" -lt "${#lab_drafts[@]}" ] || [ "$ci" -lt "${#code_drafts[@]}" ]; do
   if [ "$turn" = lab ]; then
     if   [ "$li" -lt "${#lab_drafts[@]}" ];  then draft_queue+=("${lab_drafts[$li]}");  li=$((li+1))

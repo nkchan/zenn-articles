@@ -1,0 +1,4 @@
+# Zenn 公開の承認キュー（1行1 slug、上から順に公開）
+# Kaoru が公開を OK した記事だけを書く。記事ファイル articles/<slug>.md は published: false で置いておく。
+# daily.sh（Mac mini の cron）が、前回公開から47h以上経っていれば先頭の未公開記事を1本だけ公開する。
+# ルール: pathvector-studio/ops docs/zenn.md
