@@ -29,5 +29,6 @@
   "lb-33-ipvs.md": "protocol-lab-lb-33",
   "mcast-29-igmp.md": "protocol-lab-mcast-29",
   "mss-37-clamping.md": "protocol-lab-mss-37",
-  "mtu-25-path-mtu-discovery.md": "protocol-lab-mtu-25"
+  "mtu-25-path-mtu-discovery.md": "protocol-lab-mtu-25",
+  "bgp-03-competing-origins.md": "protocol-lab-bgp-03"
 }
